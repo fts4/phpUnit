@@ -4,46 +4,52 @@ use PHPUnit\Framework\TestCase;
 
 class QueueTest extends TestCase
 {
-    protected $queue;
+    protected static $resourceIntensiveQueue; // example, assuming I'm using a Queue Server.
 
-    protected function setUp(): void
+    public function setUp(): void
     {
-        $this->queue = new Queue;
+        static::$resourceIntensiveQueue->clear();
     }
 
 
-    protected function tearDown(): void
+    public static function setUpBeforeClass()
     {
-        unset($this->quueue);
+        static::$resourceIntensiveQueue = new Queue;
+    }
+
+
+    public static function tearDownAfterClass()
+    {
+        static::$resourceIntensiveQueue = null;
     }
 
 
     public function testNewQueueIsEmpty()
     {
-        $this->assertEquals(0, $this->queue->getCount());
+        $this->assertEquals(0, static::$resourceIntensiveQueue->getCount());
     }
 
 
     public function testAnItemIsAddedToTheQueue()
     {
-        $this->queue->push('green');
-        $this->assertEquals(1, $this->queue->getCount());
+        static::$resourceIntensiveQueue->push('green');
+        $this->assertEquals(1, static::$resourceIntensiveQueue->getCount());
     }
 
 
     public function testAnItemIsRemovedFromTheQueue()
     {
-        $this->queue->push('green');
-        $item = $this->queue->pop();
-        $this->assertEquals(0, $this->queue->getCount());
+        static::$resourceIntensiveQueue->push('green');
+        $item = static::$resourceIntensiveQueue->pop();
+        $this->assertEquals(0, static::$resourceIntensiveQueue->getCount());
         $this->assertEquals('green', $item);
     }
 
 
-    public function testAnItemIsremovedFromTheFrontOfTheQueue()
+    public function testAnItemIsRemovedFromTheFrontOfTheQueue()
     {
-        $this->queue->push('first');
-        $this->queue->push('second');
-        $this->assertEquals('first', $this->queue->pop());
+        static::$resourceIntensiveQueue->push('first');
+        static::$resourceIntensiveQueue->push('second');
+        $this->assertEquals('first', static::$resourceIntensiveQueue->pop());
     }
 }
