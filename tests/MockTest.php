@@ -18,10 +18,12 @@ class MockTest extends TestCase
 
     public function testNotificationIsSent() {
         $user = new User;
-        $user->email = 'dev@example.com';
+        $user->email = 'dave@example.com';
 
         $mockMailer = $this->createMock(Mailer::class);
-        $mockMailer->method('sendMessage')
+        $mockMailer->expects($this->once())
+            ->method('sendMessage')
+            ->with($this->equalTo('dave@example.com'), $this->equalTo('Hello'))
             ->willReturn(true);
 
         // use dependency injection to use the mock object of the Mailer class
