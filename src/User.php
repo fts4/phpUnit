@@ -22,6 +22,11 @@ class User
      */
     protected $mailer;
 
+
+    public function setMailer(Mailer $mailer) {
+        $this->mailer = $mailer;
+    }
+
     /**
      * @return string
      */
@@ -32,7 +37,6 @@ class User
 
     public function notify($message)
     {
-        $mailer = new Mailer;
-        return $mailer->sendMessage($this->email, $message);
+        return $this->mailer->sendMessage($this->email, $message);
     }
 }

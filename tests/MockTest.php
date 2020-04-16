@@ -20,6 +20,13 @@ class MockTest extends TestCase
         $user = new User;
         $user->email = 'dev@example.com';
 
+        $mockMailer = $this->createMock(Mailer::class);
+        $mockMailer->method('sendMessage')
+            ->willReturn(true);
+
+        // use dependency injection to use the mock object of the Mailer class
+        $user->setMailer($mockMailer);
+
         $this->assertTrue($user->notify('Hello'));
     }
 }
