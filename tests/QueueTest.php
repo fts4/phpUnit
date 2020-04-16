@@ -52,4 +52,25 @@ class QueueTest extends TestCase
         static::$resourceIntensiveQueue->push('second');
         $this->assertEquals('first', static::$resourceIntensiveQueue->pop());
     }
+
+
+    public function testMaxNumberOfItemsCanBeAddedToQueue()
+    {
+        for ($i = 0; $i < Queue::MAX_ITEMS; $i++) {
+            static::$resourceIntensiveQueue->push($i);
+        }
+
+        $this->assertEquals(Queue::MAX_ITEMS, static::$resourceIntensiveQueue->getCount());
+    }
+
+
+    public function testExceptionThrownWhenAddingAnItemToAFullQueue() {
+        for ($i = 0; $i < Queue::MAX_ITEMS; $i++) {
+            static::$resourceIntensiveQueue->push($i);
+        }
+
+        $this->expectException(QueueException::class);
+        static::$resourceIntensiveQueue->push(5);
+    }
+
 }
