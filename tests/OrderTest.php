@@ -10,7 +10,9 @@ class OrderTest extends TestCase
             ->setMethods(['charge'])
             ->getMock();
 
-        $gateway->method('charge')
+        $gateway->expects($this->once())
+            ->method('charge')
+            ->with($this->equalTo(200))
             ->willReturn(true);
 
         $order = new Order($gateway);
