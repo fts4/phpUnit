@@ -14,4 +14,12 @@ class MockTest extends TestCase
         $result = $mock->sendMessage('dev@email.com', 'Hello');
         $this->assertTrue($result);
     }
+
+
+    public function testNotificationIsSent() {
+        $user = new User;
+        $user->email = 'dev@example.com';
+
+        $this->assertTrue($user->notify('Hello'));
+    }
 }
