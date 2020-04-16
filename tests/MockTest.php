@@ -1,6 +1,7 @@
 <?php
 
 
+use PharIo\Manifest\Email;
 use PHPUnit\Framework\TestCase;
 
 class MockTest extends TestCase
@@ -30,5 +31,30 @@ class MockTest extends TestCase
         $user->setMailer($mockMailer);
 
         $this->assertTrue($user->notify('Hello'));
+    }
+
+
+    public function testCannotNotifyUserWithNoEmail()
+    {
+        $user = new User;
+
+        // using getMockBuilder, instead of createMock, allows for full control
+        // over the created mock objects. The original code in the methods of
+        // the mock object would get run. For instance, exceptions would get
+        // thrown in this example since EmailException is thrown if user email
+        // is empty.
+        // createMock can be used to achieve the same results here but with
+        // createMock, ->will($this->throwException(EmailException)) will need
+        // to get added when stubbing the sendMessage method, causing duplication
+        // of efforts/code
+        $mockMailer = $this->getMockBuilder(Mailer::class)
+            ->setMethods(null)
+            ->getMock();
+
+        $user->setMailer($mockMailer);
+
+        $this->expectException(EmailException::class);
+
+        $user->notify('Hello');
     }
 }

@@ -17,6 +17,9 @@ class Mailer
      */
     public function sendMessage($emailAddress, $message)
     {
+        if (empty($email)) {
+            throw new EmailException("User email address can not be empty");
+        }
         // Use mail() or PHPMailer for example
         sleep(3);
 
